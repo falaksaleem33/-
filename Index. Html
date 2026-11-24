@@ -1,33 +1,602 @@
-<!DOCTYPE html>
-<html>
+  <!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>SecureGuard</title>
-  <style>
-    body {
-      background: #0f172a;
-      color: white;
-      font-family: Arial, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    button {
-      padding: 10px;
-      border-radius: 8px;
-    }
-  </style>
+    <title>SecureGuard - Login Detection System</title>
+
+    <!-- Connecting CSS File -->
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div id="app">
-    <h1>SecureGuard</h1>
-    <button onclick="showMessage('System Active')">Test Button</button>
-  </div>
 
-  <script>
-    let mode = "user";
-    let tab = "overview";
+<header>
+    <h2>🛡 SecureGuard</h2>
 
-    function showMessage(message) {
-      alert(message);
-    }
-  </script>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#alerts">Alerts</a>
+        <a href="#activity">Activity</a>
+    </nav>
+</header>
+
+<section class="hero" id="home">
+
+    <h1>Detect. Protect. Secure.</h1>
+
+    <p>
+        Suspicious Login Detection System
+        <br>
+        Monitor login activities and identify unusual sign-in attempts.
+    </p>
+
+    <button onclick="showDashboard()">
+        Open Dashboard
+    </button>
+
+</section>
+
+<section class="container" id="dashboard">
+
+    <h2>Security Dashboard</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Logins</h3>
+            <p id="total">8</p>
+        </div>
+
+        <div class="card">
+            <h3>Successful Logins</h3>
+            <p id="successful">5</p>
+        </div>
+
+        <div class="card">
+            <h3>Suspicious Logins</h3>
+            <p id="suspicious">3</p>
+        </div>
+
+    </div>
+
+    <br>
+
+    <button onclick="simulateLogin()">
+        Simulate New Login
+    </button>
+
+</section>
+
+<section class="container" id="alerts">
+
+    <h2>Suspicious Login Alerts</h2>
+
+    <div id="alertList"></div>
+
+</section>
+
+<section class="container" id="activity">
+
+    <h2>Login Activity</h2>
+
+    <input
+        type="text"
+        id="search"
+        placeholder="Search username or location..."
+        oninput="displayRecords()"
+    >
+
+    <select id="filter" onchange="displayRecords()">
+
+        <option value="All">All Status</option>
+        <option value="Success">Success</option>
+        <option value="Suspicious">Suspicious</option>
+
+    </select>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Location</th>
+                    <th>Device</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="records"></tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<footer>
+
+    <h3>SecureGuard</h3>
+
+    <p>Suspicious Login Detection System</p>
+
+    <p>Student Mini Project | 2026</p>
+
+</footer>
+
+<!-- Connecting JavaScript File -->
+<script src="script.js"></script>
+
 </body>
 </html>
+
+/* General Styling */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f7fc;
+    color: #172b46;
+}
+
+/* Header */
+
+header {
+    background: #07182f;
+    color: white;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+header h2 {
+    color: #36d5e8;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 10px;
+    font-size: 14px;
+}
+
+/* Hero Section */
+
+.hero {
+    background: linear-gradient(120deg, #07182f, #164b7c);
+    color: white;
+    padding: 85px 8%;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 45px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    line-height: 1.7;
+}
+
+/* Buttons */
+
+button {
+    background: #1677f9;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+button:hover {
+    background: #075bc5;
+}
+
+/* Main Container */
+
+.container {
+    padding: 50px 8%;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+/* Dashboard Cards */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px #00000010;
+    text-align: center;
+}
+
+.card h3 {
+    color: #1677f9;
+    margin-bottom: 15px;
+}
+
+.card p {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* Suspicious Alerts */
+
+.alert {
+    background: #fff3df;
+    border-left: 5px solid orange;
+    padding: 15px;
+    margin: 12px 0;
+    border-radius: 5px;
+}
+
+/* Input Fields */
+
+input, select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 5px;
+    max-width: 100%;
+}
+
+/* Activity Table */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    min-width: 600px;
+}
+
+th, td {
+    padding: 14px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background: #07182f;
+    color: white;
+}
+
+/* Login Status */
+
+.success {
+    color: green;
+    font-weight: bold;
+}
+
+.suspicious {
+    color: #d97706;
+    font-weight: bold;
+}
+
+/* Responsive Table */
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+/* Footer */
+
+footer {
+    background: #07182f;
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+/* Mobile Responsive Design */
+
+@media(max-width:600px) {
+
+    header {
+        gap: 15px;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .container {
+        padding: 35px 5%;
+    }
+
+}
+
+// Sample Login Records
+
+let loginRecords = [
+
+    {
+        user: "Rafaqat",
+        location: "Sukkur",
+        device: "Windows Chrome",
+        time: "09:42 AM",
+        status: "Success"
+    },
+
+    {
+        user: "Faiqa",
+        location: "Sukkur",
+        device: "Android Chrome",
+        time: "09:18 AM",
+        status: "Success"
+    },
+
+    {
+        user: "Rafiullah",
+        location: "Karachi",
+        device: "Windows Firefox",
+        time: "08:55 AM",
+        status: "Suspicious"
+    },
+
+    {
+        user: "Kashaf",
+        location: "Sobhodero",
+        device: "Android Chrome",
+        time: "07:32 PM",
+        status: "Success"
+    },
+
+    {
+        user: "Demo User",
+        location: "Unknown",
+        device: "Unknown Browser",
+        time: "02:14 AM",
+        status: "Suspicious"
+    },
+
+    {
+        user: "Noor",
+        location: "Sukkur",
+        device: "iPhone Safari",
+        time: "11:10 AM",
+        status: "Success"
+    },
+
+    {
+        user: "Sara",
+        location: "Karachi",
+        device: "Windows Edge",
+        time: "04:20 PM",
+        status: "Success"
+    },
+
+    {
+        user: "Ali",
+        location: "Unrecognized",
+        device: "Linux Browser",
+        time: "03:05 AM",
+        status: "Suspicious"
+    }
+
+];
+
+
+// Update Dashboard
+
+function updateDashboard() {
+
+    let total = loginRecords.length;
+
+    let successful = loginRecords.filter(
+        record => record.status === "Success"
+    ).length;
+
+    let suspicious = loginRecords.filter(
+        record => record.status === "Suspicious"
+    ).length;
+
+    document.getElementById("total").textContent = total;
+
+    document.getElementById("successful").textContent =
+        successful;
+
+    document.getElementById("suspicious").textContent =
+        suspicious;
+}
+
+
+// Display Login Records
+
+function displayRecords() {
+
+    let search = document.getElementById("search")
+        .value.toLowerCase();
+
+    let filter = document.getElementById("filter").value;
+
+    let table = document.getElementById("records");
+
+    table.innerHTML = "";
+
+    let filtered = loginRecords.filter(record => {
+
+        let matchesSearch =
+            record.user.toLowerCase().includes(search) ||
+            record.location.toLowerCase().includes(search);
+
+        let matchesFilter =
+            filter === "All" || record.status === filter;
+
+        return matchesSearch && matchesFilter;
+
+    });
+
+    filtered.forEach(record => {
+
+        let row = document.createElement("tr");
+
+        [
+            record.user,
+            record.location,
+            record.device,
+            record.time
+        ].forEach(value => {
+
+            let cell = document.createElement("td");
+
+            cell.textContent = value;
+
+            row.appendChild(cell);
+
+        });
+
+        let statusCell = document.createElement("td");
+
+        statusCell.textContent = record.status;
+
+        statusCell.className =
+            record.status === "Success" ? "success" : "suspicious";
+
+        row.appendChild(statusCell);
+
+        table.appendChild(row);
+
+    });
+
+    // Show message if no records are found
+
+    if (filtered.length === 0) {
+
+        let row = document.createElement("tr");
+
+        let cell = document.createElement("td");
+
+        cell.colSpan = 5;
+
+        cell.textContent = "No records found.";
+
+        row.appendChild(cell);
+
+        table.appendChild(row);
+
+    }
+
+}
+
+
+// Display Suspicious Alerts
+
+function displayAlerts() {
+
+    let alertList = document.getElementById("alertList");
+
+    alertList.innerHTML = "";
+
+    let suspiciousRecords = loginRecords.filter(
+        record => record.status === "Suspicious"
+    );
+
+    if (suspiciousRecords.length === 0) {
+
+        alertList.textContent = "No suspicious demo events.";
+
+        return;
+
+    }
+
+    suspiciousRecords.forEach(record => {
+
+        let alert = document.createElement("div");
+
+        alert.className = "alert";
+
+        let message = document.createElement("p");
+
+        message.textContent =
+            "⚠ Suspicious Login: " + record.user +
+            " | Location: " + record.location +
+            " | Device: " + record.device +
+            " | Time: " + record.time;
+
+        alert.appendChild(message);
+
+        alertList.appendChild(alert);
+
+    });
+
+}
+
+
+// Simulate New Login Event
+
+function simulateLogin() {
+
+    let newRecord = {
+
+        user: "Demo Visitor",
+
+        location: "Unknown Location",
+
+        device: "Unknown Browser",
+
+        time: new Date().toLocaleTimeString(),
+
+        status: "Suspicious"
+
+    };
+
+    loginRecords.unshift(newRecord);
+
+    updateDashboard();
+
+    displayRecords();
+
+    displayAlerts();
+
+    alert("New suspicious demo login event added!");
+
+}
+
+
+// Open Dashboard
+
+function showDashboard() {
+
+    document.getElementById("dashboard").scrollIntoView({
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+// Initial Page Rendering
+
+updateDashboard();
+
+displayRecords();
+
+displayAlerts();
