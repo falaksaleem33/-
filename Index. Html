@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SecureGuard</title>
+  <style>
+    body {
+      background: #0f172a;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    button {
+      padding: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>SecureGuard</h1>
+    <button onclick="showMessage('System Active')">Test Button</button>
+  </div>
+
+  <script>
+    let mode = "user";
+    let tab = "overview";
+
+    function showMessage(message) {
+      alert(message);
+    }
+  </script>
+</body>
+</html>
